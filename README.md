@@ -16,7 +16,7 @@ Because the crystal ball broke, and guessing isn't profitable (I know 🥲). Als
 ## 📅 How It Works
 1. Data from the ALPACA API is fetched daily.
 2. The system runs predictions using LSTM and XGBoost models.
-3. Results and accuracy comparisons are updated everyday at https://pankitthakkar.github.io/SPP/
+3. Results and accuracy comparisons are updated everyday at https://pankitthakkar.github.io/StockPredictor/
 
 ## 🚀 Getting Started
 1. Clone the repo: `git clone https://github.com/pankitthakkar/StockPredictor.git`
