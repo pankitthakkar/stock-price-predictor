@@ -416,7 +416,7 @@ def generate_dashboard(prediction_df):
     html_content += """
             <footer class="footer">
                 <p>This dashboard automatically updates with new prediction data daily</p>
-                <p>&copy; 2025 Stock Price Prediction Tool</p>
+                <p>&copy; 2025 Stock Price Predictor</p>
             </footer>
         </div>
         

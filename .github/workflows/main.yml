@@ -40,7 +40,7 @@ jobs:
           git config --global user.email 'actions@github.com'
       
           # Use the secret token to authenticate git push
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pankitthakkar/StockPredictor.git
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pankitthakkar/stock-price-predictor.git
       
           # Stash any uncommitted changes
           git stash --include-untracked
@@ -53,7 +53,7 @@ jobs:
       
           # Stage and commit the changes
           git add .  # Stage all the changes
-          git commit -m "Update prediction results and dashboard" || echo "No changes to commit"
+          git commit -m "Updated prediction results and dashboard" || echo "No changes to commit"
       
           # Push the changes after pulling remote updates
           git push

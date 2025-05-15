@@ -16,10 +16,10 @@ Because the crystal ball broke, and guessing isn't profitable (I know 🥲). Als
 ## 📅 How It Works
 1. Data from the ALPACA API is fetched daily.
 2. The system runs predictions using LSTM and XGBoost models.
-3. Results and accuracy comparisons are updated everyday at https://pankitthakkar.github.io/StockPredictor/
+3. Results and accuracy comparisons are updated everyday at https://pankitthakkar.github.io/stock-price-predictor/
 
 ## 🚀 Getting Started
-1. Clone the repo: `git clone https://github.com/pankitthakkar/StockPredictor.git`
+1. Clone the repo: `git clone https://github.com/pankitthakkar/stock-price-predictor.git`
 2. Set up `APCA_API_KEY_ID` & `APCA_API_SECRET_KEY` in the `.env` file.
 3. Sit back and watch the market insights roll in!
 
@@ -33,4 +33,4 @@ Found a bug? Have a feature request? Want to share your stock-picking success st
 This project is for educational purposes only. No stock-picking strategy is guaranteed to succeed, and I recommend consulting a financial advisor before investing.
 
 Buy low, sell high! 🚀
-... or Buy high, sell low 📉 — because who needs profit, right? 😂
+... or Buy high, sell low 📉 — if you're into that.
