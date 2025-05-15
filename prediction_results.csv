@@ -1,2 +1,3 @@
 date,symbol,lstm_prediction,xgb_prediction,actual_price,lstm_error,xgb_error
+2025-05-15,AAPL,200.41134643554688,206.31263732910156,,,
 2025-05-15,AAPL,196.01158,208.68344,,,
