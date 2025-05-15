@@ -1,0 +1,66 @@
+name: Daily Stock Price Prediction
+
+on:
+  schedule:
+    - cron: '30 20 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  predict_stock_prices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Create .env file
+        run: |
+          echo "APCA_API_KEY_ID=${{ secrets.APCA_API_KEY_ID }}" > .env
+          echo "APCA_API_SECRET_KEY=${{ secrets.APCA_API_SECRET_KEY }}" >> .env
+          
+      - name: Run the script
+        run: python main.py
+        
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
+      
+          # Use the secret token to authenticate git push
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/pankitthakkar/SPP.git
+      
+          # Stash any uncommitted changes
+          git stash --include-untracked
+      
+          # Pull remote changes with rebase (no merge conflicts expected)
+          git pull origin main --rebase
+      
+          # Apply stashed changes back
+          git stash pop
+      
+          # Stage and commit the changes
+          git add .  # Stage all the changes
+          git commit -m "Update prediction results and dashboard" || echo "No changes to commit"
+      
+          # Push the changes after pulling remote updates
+          git push
+          
+      - name: Deploy Dashboard to GitHub Pages
+        if: success()
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dashboard
+          branch: gh-pages
