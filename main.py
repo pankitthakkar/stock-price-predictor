@@ -9,7 +9,7 @@ from dashboard_generator import generate_dashboard
 def main():
     print(f"Starting prediction job at {datetime.datetime.now()}")
 
-    symbols = [ "TSLA", "NVDA", "NFLX", "MSFT", "AMZN", "AAPL"]
+    symbols = ["AAPL"]
 
     for symbol in symbols:
         print(f"Processing {symbol}...")
