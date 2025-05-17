@@ -28,9 +28,24 @@ def get_latest_data(symbol):
     return daily_bars
 
 def get_current_price(symbol):
-    request = StockLatestQuoteRequest(symbol_or_symbols=symbol)
-    latest_quote = data_client.get_stock_latest_quote(request)
+    today = pd.Timestamp.now().date()
     
-    # Return the midpoint of bid and ask as an approximation of current price
-    quote = latest_quote[symbol]
-    return (quote.bid_price + quote.ask_price) / 2
+    # Get the today's closing price
+    daily_request = StockBarsRequest(
+        symbol_or_symbols=[symbol], 
+        timeframe=TimeFrame.Day, 
+        start=today,
+    )
+
+    daily_bars = data_client.get_stock_bars(daily_request).df
+
+    if not daily_bars.empty:
+        return daily_bars.iloc[-1]['close']
+    else:
+        request = StockLatestQuoteRequest(symbol_or_symbols=symbol)
+        
+        latest_quote = data_client.get_stock_latest_quote(request)
+    
+        # Return the midpoint of bid and ask as an approximation of current price
+        quote = latest_quote[symbol]
+        return (quote.bid_price + quote.ask_price) / 2
