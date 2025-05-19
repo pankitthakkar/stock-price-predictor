@@ -17,15 +17,21 @@ def update_prediction_file(symbol, lstm_prediction, xgb_prediction):
     
     df = pd.read_csv(file_path)
     
-    # Checks yesterday's prediction & updates it with the actual price
-    yesterday = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-    
     actual_price = get_current_price(symbol)
+    
+    # Find the most recent prediction for this symbol that hasn't been updated with actual price
+    unupdated_predictions = df[
+        (df['symbol'] == symbol) & 
+        (df['actual_price'].isna()) & 
+        (df['date'] < today)
+    ]
+    
+    if not unupdated_predictions.empty:
+        # Sort by date in descending order to get the most recent prediction
+        most_recent = unupdated_predictions.sort_values('date', ascending=False).iloc[0]
+        idx = most_recent.name
         
-    # Updates yesterday's row with actual price and calculate error
-    yesterday_row = df[(df['date'] == yesterday) & (df['symbol'] == symbol)]
-    if not yesterday_row.empty:
-        idx = yesterday_row.index[0]
+        # Update the most recent unupdated prediction with actual price and calculate errors
         df.at[idx, 'actual_price'] = actual_price
         df.at[idx, 'lstm_error'] = abs(actual_price - df.at[idx, 'lstm_prediction'])
         df.at[idx, 'xgb_error'] = abs(actual_price - df.at[idx, 'xgb_prediction'])
