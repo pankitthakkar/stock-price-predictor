@@ -293,13 +293,23 @@ def generate_dashboard(prediction_df):
                     min-width: 120px;
                 }}
             }}
+
+            .error-low {{
+                color: #10b981;
+                font-weight: 600;
+            }}
+
+            .error-high {{
+                color: #ef4444;
+                font-weight: 600;
+            }}
         </style>
     </head>
     <body>
         <div class="container">
             <header class="header">
                 <h1>Stock Price Prediction Dashboard</h1>
-                <p class="last-updated">Last updated: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}</p>
+                <p class="last-updated">Last updated: {datetime.datetime.now().strftime('%B %d, %Y %H:%M:%S UTC')}</p>
             </header>
             
             <div class="symbol-selector">
@@ -325,7 +335,7 @@ def generate_dashboard(prediction_df):
                 <div class="predictions-panel">
                     <div class="prediction-card date-card">
                         <h3>Prediction Date</h3>
-                        <div class="prediction-value">{charts['latest_date']}</div>
+                        <div class="prediction-value">{datetime.datetime.strptime(charts['latest_date'], '%Y-%m-%d').strftime('%B %d, %Y')}</div>
                     </div>
                     <div class="prediction-card lstm-card">
                         <h3>LSTM Prediction</h3>
@@ -392,16 +402,23 @@ def generate_dashboard(prediction_df):
                             </thead>
                             <tbody>
         """
-        
+
         for _, row in symbol_df.iterrows():
+            lstm_error_class = "error-low" if row['lstm_error'] < row['xgb_error'] else "error-high"
+            xgb_error_class = "error-low" if row['xgb_error'] < row['lstm_error'] else "error-high"
+
+            actual_price_display = f"${row['actual_price']:.2f}" if not pd.isna(row['actual_price']) else "-"
+            lstm_error_display = f"{row['lstm_error']:.2f}" if not pd.isna(row['lstm_error']) else "-"
+            xgb_error_display = f"{row['xgb_error']:.2f}" if not pd.isna(row['xgb_error']) else "-"
+
             html_content += f"""
                                 <tr>
-                                    <td>{row['date']}</td>
+                                    <td>{datetime.datetime.strptime(row['date'], "%Y-%m-%d").strftime("%B %d, %Y")}</td>
                                     <td>${row['lstm_prediction']:.2f}</td>
                                     <td>${row['xgb_prediction']:.2f}</td>
-                                    <td>{f"${row['actual_price']:.2f}" if not pd.isna(row['actual_price']) else "Pending"}</td>
-                                    <td>{f"${row['lstm_error']:.2f}" if not pd.isna(row['lstm_error']) else "N/A"}</td>
-                                    <td>{f"${row['xgb_error']:.2f}" if not pd.isna(row['xgb_error']) else "N/A"}</td>
+                                    <td>{actual_price_display}</td>
+                                    <td class="{lstm_error_class}">{lstm_error_display}</td>
+                                    <td class="{xgb_error_class}">{xgb_error_display}</td>
                                 </tr>
             """
         

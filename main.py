@@ -5,6 +5,7 @@ from feature_engineering import prepare_features
 from modeling import train_models, predict_next_day
 from prediction_updater import update_prediction_file
 from dashboard_generator import generate_dashboard
+from utils import is_data_current
 
 def main():
     print(f"Starting prediction job at {datetime.datetime.now()}")
@@ -16,6 +17,11 @@ def main():
         
         # Gets the latest data
         daily_bars = get_latest_data(symbol)
+        
+        # Check if data is current
+        if not is_data_current(daily_bars):
+            print(f"Data for {symbol} is not current. Skipping prediction for this symbol.")
+            continue
         
         # Prepares the features
         df, features = prepare_features(daily_bars)
