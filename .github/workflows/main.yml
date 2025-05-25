@@ -33,6 +33,11 @@ jobs:
           
       - name: Run the script
         run: python main.py
+
+      - name: Update README with the latest run date
+        run: |
+          DATE=$(date -u "+%B %d, %Y at %H:%M UTC")
+          sed -i "s|<!-- LATEST_RUN_DATE -->.*|<!-- LATEST_RUN_DATE -->$DATE|" README.md
         
       - name: Commit and push changes
         run: |
