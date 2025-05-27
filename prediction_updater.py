@@ -33,7 +33,7 @@ def update_prediction_file(symbol, lstm_prediction, xgb_prediction):
     unupdated_predictions = df[
         (df['symbol'] == symbol) & 
         (df['actual_price'].isna()) & 
-        (pd.to_datetime(df['date']).dt.date < today)
+        (pd.to_datetime(df['date']).dt.date <= today)
     ]
     
     if not unupdated_predictions.empty:
